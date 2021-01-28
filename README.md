@@ -1,12 +1,12 @@
 # napari-nikon-nd2
 
-[![License](https://img.shields.io/pypi/l/napari-nikon-nd2.svg?color=green)](https://github.com/cwood1967/napari-nikon-nd2/raw/master/LICENSE)
+[![License](https://img.shields.io/pypi/l/napari-nikon-nd2.svg?color=green)](https://github.com/cwood1967/napari-nikon-nd2/raw/main/LICENSE)
 [![PyPI](https://img.shields.io/pypi/v/napari-nikon-nd2.svg?color=green)](https://pypi.org/project/napari-nikon-nd2)
 [![Python Version](https://img.shields.io/pypi/pyversions/napari-nikon-nd2.svg?color=green)](https://python.org)
 [![tests](https://github.com/cwood1967/napari-nikon-nd2/workflows/tests/badge.svg)](https://github.com/cwood1967/napari-nikon-nd2/actions)
-[![codecov](https://codecov.io/gh/cwood1967/napari-nikon-nd2/branch/master/graph/badge.svg)](https://codecov.io/gh/cwood1967/napari-nikon-nd2)
+[![codecov](https://codecov.io/gh/cwood1967/napari-nikon-nd2/branch/main/graph/badge.svg)](https://codecov.io/gh/cwood1967/napari-nikon-nd2)
 
-Opens Nikon ND2 files into napari.
+Opens Nikon ND2 files into napari. This plugin uses the [nd2reader] and [pims] python packages. 
 
 ----------------------------------
 
@@ -55,3 +55,5 @@ If you encounter any problems, please [file an issue] along with a detailed desc
 [tox]: https://tox.readthedocs.io/en/latest/
 [pip]: https://pypi.org/project/pip/
 [PyPI]: https://pypi.org/
+[nd2reader]: https://github.com/rbnvrw/nd2reader
+[pims]: https://github.com/soft-matter/pims
