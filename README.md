@@ -1,6 +1,6 @@
 # napari-nikon-nd2
 
-[![License](https://img.shields.io/pypi/l/napari-nikon-nd2.svg?color=green)](https://github.com/cwood1967/napari-nikon-nd2/raw/main/LICENSE)
+[![License](https://img.shields.io/pypi/l/napari-nikon-nd2.svg?color=green)](https://github.com/cwood1967/napari-nikon-nd2/blob/main/LICENSE)
 [![PyPI](https://img.shields.io/pypi/v/napari-nikon-nd2.svg?color=green)](https://pypi.org/project/napari-nikon-nd2)
 [![Python Version](https://img.shields.io/pypi/pyversions/napari-nikon-nd2.svg?color=green)](https://python.org)
 [![tests](https://github.com/cwood1967/napari-nikon-nd2/workflows/tests/badge.svg)](https://github.com/cwood1967/napari-nikon-nd2/actions)
