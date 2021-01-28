@@ -42,10 +42,9 @@ If you encounter any problems, please [file an issue] along with a detailed desc
 
 ## Credits
 
-This [napari] plugin was created from the following as examples:
+This [napari] plugin was created using [Napari Delta Vision Reader] and
+the [Allen Institute IO] plugin as examples.
 
-    - [napari-dv] Napari Delta Vision Reader
-    - [napari-aicsimageio] Allen Institute IO plugin
 
 [napari]: https://github.com/napari/napari
 [Cookiecutter]: https://github.com/audreyr/cookiecutter
@@ -64,5 +63,5 @@ This [napari] plugin was created from the following as examples:
 [PyPI]: https://pypi.org/
 [nd2reader]: https://github.com/rbnvrw/nd2reader
 [pims]: https://github.com/soft-matter/pims
-[napari-aicsimageio]: https://github.com/AllenCellModeling/napari-aicsimageio
-[napari-dv]: https://github.com/tlambert03/napari-dv
+[Allen Institute IO]: https://github.com/AllenCellModeling/napari-aicsimageio
+[Napari Delta Vision Reader]: https://github.com/tlambert03/napari-dv
