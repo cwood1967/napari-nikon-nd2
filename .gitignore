@@ -1,0 +1,9 @@
+.idea
+*.pyc
+.DS_Store
+*.DS_Store
+.ipynb_checkpoints
+!.gitignore
+*~
+napari_nd2.egg-info
+.vscode
