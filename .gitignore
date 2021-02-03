@@ -5,5 +5,5 @@
 .ipynb_checkpoints
 !.gitignore
 *~
-napari_nd2.egg-info
+*.egg-info
 .vscode
