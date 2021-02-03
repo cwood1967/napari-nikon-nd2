@@ -3,15 +3,12 @@ from napari_nikon_nd2 import napari_get_reader
 
 
 # tmp_path is a pytest fixture
-def test_reader(tmp_path):
-    """An example of how you might test your plugin."""
+def test_reader():
 
+    tmp_path = "tmpData"
     # write some fake data using your supported file format
-    my_test_file = str(tmp_path / "myfile.npy")
-    original_data = np.random.rand(20, 20)
-    np.save(my_test_file, original_data)
+    my_test_file = "/".join([tmp_path, "test.nd2"])
 
-    # try to read it back in
     reader = napari_get_reader(my_test_file)
     assert callable(reader)
 
@@ -21,10 +18,12 @@ def test_reader(tmp_path):
     layer_data_tuple = layer_data_list[0]
     assert isinstance(layer_data_tuple, tuple) and len(layer_data_tuple) > 0
 
-    # make sure it's the same as it started
-    np.testing.assert_allclose(original_data, layer_data_tuple[0])
-
-
+    # check for 3 channels
+    assert layer_data_tuple[0].shape[0] == 3
+    # check for 3-dimensions
+    assert len(layer_data_tuple[0].shape) == 3
+    print(len(layer_data_tuple))
+    
 def test_get_reader_pass():
     reader = napari_get_reader("fake.file")
     assert reader is None
