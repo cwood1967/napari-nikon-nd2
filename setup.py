@@ -26,10 +26,10 @@ use_scm = {"write_to": "napari_nikon_nd2/_version.py"}
 
 setup(
     name='napari-nikon-nd2',
-    version="0.1.1",
+    version="0.1.2",
     author='Chris Wood',
     author_email='cwood1967@gmail.com',
-    license='Apache License 2.0',
+    license='Apache Software License 2.0',
     url='https://github.com/cwood1967/napari-nikon-nd2',
     description='Opens Nikon ND2 files into napari.',
     long_description=read('README.md'),
@@ -50,7 +50,7 @@ setup(
         'Programming Language :: Python :: 3.8',
         'Programming Language :: Python :: 3.9',
         'Operating System :: OS Independent',
-        'License :: OSI Approved :: Apache License',
+        'License :: OSI Approved :: Apache Software License',
     ],
     entry_points={
         'napari.plugin': [
