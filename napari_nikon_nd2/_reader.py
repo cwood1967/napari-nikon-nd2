@@ -1,20 +1,20 @@
 """
-This module is an example of a barebones numpy reader plugin for napari.
+This module is an import plugin for napari to read Nikon nd2 files.
 
 It implements the ``napari_get_reader`` hook specification, (to create
-a reader plugin) but your plugin may choose to implement any of the hook
-specifications offered by napari.
+a reader plugin). 
 see: https://napari.org/docs/dev/plugins/hook_specifications.html
-
-Replace code below accordingly.  For complete documentation see:
-https://napari.org/docs/dev/plugins/for_plugin_developers.html
 """
+from typing import Any, Callable, Dict, List, Optional, Tuple, Union
+import os
+
 import numpy as np
+from nd2reader import ND2Reader
 from napari_plugin_engine import napari_hook_implementation
 
 
 @napari_hook_implementation
-def napari_get_reader(path):
+def napari_get_reader(path: Union[str, List[str]]) -> Optional[ReaderFunction]:
     """A basic implementation of the napari_get_reader hook specification.
 
     Parameters
@@ -28,14 +28,11 @@ def napari_get_reader(path):
         If the path is a recognized format, return a function that accepts the
         same path or list of paths, and returns a list of layer data tuples.
     """
-    if isinstance(path, list):
-        # reader plugins may be handed single path, or a list of paths.
-        # if it is a list, it is assumed to be an image stack...
-        # so we are only going to look at the first file.
-        path = path[0]
+    if isinstance(path, list) and path.endswith('.nd2'):
+        path = path[0] 
 
     # if we know we cannot read the file, we immediately return None.
-    if not path.endswith(".npy"):
+    if not path.endswith(".nd2"):
         return None
 
     # otherwise we return the *function* that can read ``path``.
@@ -43,17 +40,14 @@ def napari_get_reader(path):
 
 
 def reader_function(path):
-    """Take a path or list of paths and return a list of LayerData tuples.
 
-    Readers are expected to return data as a list of tuples, where each tuple
-    is (data, [add_kwargs, [layer_type]]), "add_kwargs" and "layer_type" are
-    both optional.
-
+    '''Read a Nikon ND2 file
+    
     Parameters
     ----------
-    path : str or list of str
-        Path to file, or list of paths.
-
+    path : str
+        Path to the image to open
+        
     Returns
     -------
     layer_data : list of tuples
@@ -61,18 +55,34 @@ def reader_function(path):
         (data, metadata, layer_type), where data is a numpy array, metadata is
         a dict of keyword arguments for the corresponding viewer.add_* method
         in napari, and layer_type is a lower-case string naming the type of layer.
-        Both "meta", and "layer_type" are optional. napari will default to
-        layer_type=="image" if not provided
-    """
-    # handle both a string and a list of strings
-    paths = [path] if isinstance(path, str) else path
-    # load all files into array
-    arrays = [np.load(_path) for _path in paths]
-    # stack arrays into single array
-    data = np.squeeze(np.stack(arrays))
+    '''
 
-    # optional kwargs for the corresponding viewer.add_* method
-    add_kwargs = {}
+    ndx = ND2Reader(path)
+    name = os.path.basename(path)[:-4]
+    sizes = ndx.sizes
+    
+    if 't' not in sizes:
+        sizes['t'] = 1
+    if 'z' not in sizes:
+        sizes['z'] = 1
+    if 'c' not in sizes:
+        sizes['c'] = 1
 
+    ndx.bundle_axes = 'zcyx'
+    ndx.iter_axes = 't'
+    n = len(ndx)
+
+    shape = (sizes['t'], sizes['z'], sizes['c'], sizes['y'], sizes['x'])
+    image  = np.zeros(shape, dtype=np.float32)
+
+    for i in range(n):
+        image[i] = ndx.get_frame(i)
+
+    image = np.squeeze(image)
+
+    params = {
+        "name":name,
+    }
     layer_type = "image"  # optional, default is "image"
-    return [(data, add_kwargs, layer_type)]
+
+    return [(image, params, layer_type)]
