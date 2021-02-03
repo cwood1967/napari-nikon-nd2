@@ -26,7 +26,7 @@ use_scm = {"write_to": "napari_nikon_nd2/_version.py"}
 
 setup(
     name='napari-nikon-nd2',
-    version="0.1.1"
+    version="0.1.1",
     author='Chris Wood',
     author_email='cwood1967@gmail.com',
     license='Apache License 2.0',
