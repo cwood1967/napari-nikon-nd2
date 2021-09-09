@@ -11,6 +11,7 @@ import os
 import numpy as np
 from nd2reader import ND2Reader
 from napari_plugin_engine import napari_hook_implementation
+from .dialogs import open_options, openWindow
 
 PathLike = Union[str, List[str]]
 LayerData = Union[Tuple[Any], Tuple[Any, Dict], Tuple[Any, Dict, str]]
@@ -75,6 +76,10 @@ def reader_function(path):
     ndx.iter_axes = 't'
     n = len(ndx)
 
+    # _z = open_options.show()
+    _z = openWindow(path, 5)
+    _z.show()
+    print(_z)
     shape = (sizes['t'], sizes['z'], sizes['c'], sizes['y'], sizes['x'])
     image  = np.zeros(shape, dtype=np.float32)
 
