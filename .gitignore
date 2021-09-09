@@ -118,6 +118,7 @@ venv.bak/
 # VSCode
 .vscode/
 
+_version.py
 */_version.py
 .idea
 .DS_Store
