@@ -9,7 +9,7 @@ def test_reader():
     # write some fake data using your supported file format
     my_test_file = "/".join([tmp_path, "test.nd2"])
 
-    reader = napari_get_reader(my_test_file)
+    reader = get_reader(my_test_file)
     assert callable(reader)
 
     # make sure we're delivering the right format
@@ -25,5 +25,5 @@ def test_reader():
     print(len(layer_data_tuple))
     
 def test_get_reader_pass():
-    reader = napari_get_reader("fake.file")
+    reader = get_reader("fake.file")
     assert reader is None

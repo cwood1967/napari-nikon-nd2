@@ -47,7 +47,7 @@ def reader_function(path):
         if s == "C":
             channel_axis=idx
             break
-    print(channel_axis)
+        
     vz = ndx.voxel_size().z
     vy = ndx.voxel_size().y
     vx = ndx.voxel_size().x
@@ -59,10 +59,11 @@ def reader_function(path):
     
     img = ndx.to_dask()
     
-    if img.size < 1_000_000_000:
+    if img.nbytes < 2_000_000_000:
         img = img.compute()
-        print("computing")
-        
+    
+    ndx.close()
+    
     params = {
         "channel_axis": channel_axis,
         "scale": scale,
