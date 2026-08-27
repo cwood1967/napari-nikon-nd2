@@ -1,0 +1,48 @@
+[build-system]
+requires = ["hatchling", "hatch-vcs"]
+build-backend = "hatchling.build"
+
+[project]
+name = "napari-nikon-nd2"
+dynamic = ["version"]
+description = "Opens Nikon ND2 files into napari."
+readme = "README.md"
+license = "Apache-2.0"
+authors = [{ name = "Chris Wood", email = "cwood1967@gmail.com" }]
+requires-python = ">=3.12"
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Developers",
+    "Framework :: napari",
+    "Topic :: Software Development :: Testing",
+    "Programming Language :: Python",
+    "Programming Language :: Python :: 3",
+    "Operating System :: OS Independent",
+    "License :: OSI Approved :: Apache Software License",
+]
+dependencies = [
+    "napari[all]>=0.9.0",
+    "nd2>=0.11.3",
+]
+
+[project.urls]
+Repository = "https://github.com/cwood1967/napari-nikon-nd2"
+
+[project.entry-points."napari.manifest"]
+napari-nikon-nd2 = "napari_nikon_nd2:napari.yaml"
+
+[tool.hatch.version]
+source = "vcs"
+
+[tool.hatch.build.hooks.vcs]
+version-file = "src/napari_nikon_nd2/_version.py"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/napari_nikon_nd2"]
+
+[dependency-groups]
+dev = [
+    "pytest",
+    "pytest-cov",
+    "pytest-qt",
+]

@@ -1,0 +1,12 @@
+name: napari-nikon-nd2
+display_name: Nikon ND2
+contributions:
+  commands:
+    - id: napari-nikon-nd2.get_reader
+      python_name: napari_nikon_nd2._reader:napari_get_reader
+      title: Open ND2 file
+  readers:
+    - command: napari-nikon-nd2.get_reader
+      accepts_directories: false
+      filename_patterns:
+        - "*.nd2"
