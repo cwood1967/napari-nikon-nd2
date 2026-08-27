@@ -1,45 +1,23 @@
 """
 This module is an import plugin for napari to read Nikon nd2 files.
 
-It implements the ``napari_get_reader`` hook specification, (to create
-a reader plugin). 
-see: https://napari.org/docs/dev/plugins/hook_specifications.html
 """
 from typing import Any, Callable, Dict, List, Optional, Tuple, Union
-import os
+import pathlib
 
 import numpy as np
-from nd2reader import ND2Reader
-from napari_plugin_engine import napari_hook_implementation
+import nd2
 
 PathLike = Union[str, List[str]]
 LayerData = Union[Tuple[Any], Tuple[Any, Dict], Tuple[Any, Dict, str]]
 ReaderFunction = Callable[[PathLike], List[LayerData]]
 
-@napari_hook_implementation
-def napari_get_reader(path: Union[str, List[str]]) -> Optional[ReaderFunction]:
-    """A basic implementation of the napari_get_reader hook specification.
-
-    Parameters
-    ----------
-    path : str or list of str
-        Path to file, or list of paths.
-
-    Returns
-    -------
-    function or None
-        If the path is a recognized format, return a function that accepts the
-        same path or list of paths, and returns a list of layer data tuples.
-    """
-    if isinstance(path, list) and path.endswith('.nd2'):
-        path = path[0] 
-
-    # if we know we cannot read the file, we immediately return None.
-    if not path.endswith(".nd2"):
-        return None
-
-    # otherwise we return the *function* that can read ``path``.
-    return reader_function
+def get_reader(path: PathLike):
+    
+    if path.endswith(".nd2"):
+        return reader_function
+    
+    return None
 
 
 def reader_function(path):
@@ -60,37 +38,36 @@ def reader_function(path):
         in napari, and layer_type is a lower-case string naming the type of layer.
     '''
 
-    ndx = ND2Reader(path)
-    name = os.path.basename(path)[:-4]
-    sizes = ndx.sizes
+    ndx = nd2.ND2File(path)
     
-    if 't' not in sizes:
-        sizes['t'] = 1
-    if 'z' not in sizes:
-        sizes['z'] = 1
-    if 'c' not in sizes:
-        sizes['c'] = 1
-
-    ndx.bundle_axes = 'zcyx'
-    ndx.iter_axes = 't'
-    n = len(ndx)
-
-    shape = (sizes['t'], sizes['z'], sizes['c'], sizes['y'], sizes['x'])
-    image  = np.zeros(shape, dtype=np.float32)
-
-    for i in range(n):
-        image[i] = ndx.get_frame(i)
-
-    image = np.squeeze(image)
+    name = pathlib.Path(path).stem
     
-    if sizes['c'] > 1:
-        channel_axis = len(image.shape) - 3
+    channel_axis=None
+    for idx, s in enumerate(ndx.sizes.keys()):
+        if s == "C":
+            channel_axis=idx
+            break
+    print(channel_axis)
+    vz = ndx.voxel_size().z
+    vy = ndx.voxel_size().y
+    vx = ndx.voxel_size().x
+    
+    if "Z" in ndx.sizes:
+        scale = (vz, vy, vx)
     else:
-        channel_axis = None 
+        scale = (vy, vx)
+    
+    img = ndx.to_dask()
+    
+    if img.size < 1_000_000_000:
+        img = img.compute()
+        print("computing")
+        
     params = {
-        "channel_axis":channel_axis,
+        "channel_axis": channel_axis,
+        "scale": scale,
         "name":name,
     }
     layer_type = "image"  # optional, default is "image"
 
-    return [(image, params, layer_type)]
+    return [(img, params, layer_type)]
